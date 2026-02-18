@@ -1,4 +1,4 @@
-name: benchmark-1
+name: benchmark-6
 
 on:
   workflow_dispatch:
