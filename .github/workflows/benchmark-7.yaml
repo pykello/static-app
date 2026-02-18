@@ -1,4 +1,4 @@
-name: benchmark-6
+name: benchmark-7
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
     - name: "I/O: fio random read 4K (iodepth=256)"
       run: |
         fio --name=rand-read-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
-          --size=1G --numjobs=1 --rw=randread --group_reporting --runtime=30 --time_based \
+          --size=1G --numjobs=2 --rw=randread --group_reporting --runtime=30 --time_based \
           --directory=/tmp/fio
         sudo rm -rf /tmp/fio && mkdir -p /tmp/fio
     - name: "I/O: fio random write 4K (iodepth=256)"
