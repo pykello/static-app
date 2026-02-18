@@ -26,30 +26,14 @@ jobs:
         mkdir -p /tmp/fio
     - name: "I/O: fio random read 4K (iodepth=256)"
       run: |
-        OUTPUT=$(fio --name=rand-read-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
+        fio --name=rand-read-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
           --size=1G --numjobs=4 --rw=randread --group_reporting --runtime=30 --time_based \
-          --directory=/tmp/fio)
-        echo "$OUTPUT"
-        BW=$(echo "$OUTPUT" | grep "READ:" | grep -oP 'bw=\S+' | head -1)
-        echo "I/O: fio rand read 4K (d256)=$BW" >> "$S"
+          --directory=/tmp/fio
         rm -rf /tmp/fio && mkdir -p /tmp/fio
     - name: "I/O: fio random write 4K (iodepth=256)"
       run: |
-        OUTPUT=$(fio --name=rand-write-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
+        fio --name=rand-write-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
           --size=1G --numjobs=4 --rw=randwrite --group_reporting --runtime=30 --time_based \
-          --directory=/tmp/fio)
-        echo "$OUTPUT"
-        BW=$(echo "$OUTPUT" | grep "WRITE:" | grep -oP 'bw=\S+' | head -1)
-        echo "I/O: fio rand write 4K (d256)=$BW" >> "$S"
+          --directory=/tmp/fio
         rm -rf /tmp/fio && mkdir -p /tmp/fio
-    - name: "I/O: fio mixed random read/write 4K (iodepth=256)"
-      run: |
-        OUTPUT=$(fio --name=rand-rw-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
-          --size=1G --numjobs=4 --rw=randrw --rwmixread=70 --group_reporting --runtime=30 --time_based \
-          --directory=/tmp/fio)
-        echo "$OUTPUT"
-        READ_BW=$(echo "$OUTPUT" | grep "READ:" | grep -oP 'bw=\S+' | head -1)
-        WRITE_BW=$(echo "$OUTPUT" | grep "WRITE:" | grep -oP 'bw=\S+' | head -1)
-        echo "I/O: fio mixed r/w 4K read (d256)=$READ_BW" >> "$S"
-        echo "I/O: fio mixed r/w 4K write (d256)=$WRITE_BW" >> "$S"
-        rm -rf /tmp/fio
+
