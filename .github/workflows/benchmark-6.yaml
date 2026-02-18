@@ -24,15 +24,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y sysbench fio p7zip-full postgresql-client
         mkdir -p /tmp/fio
+    - name: "Tune the scheduler"
+      run: echo 5000000 | sudo tee /proc/sys/kernel/sched_migration_cost_ns
     - name: "I/O: fio random read 4K (iodepth=256)"
       run: |
         fio --name=rand-read-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
           --size=1G --numjobs=4 --rw=randread --group_reporting --runtime=30 --time_based \
-          --directory=/tmp/fio --cpus_allowed=0,1
+          --directory=/tmp/fio
         rm -rf /tmp/fio && mkdir -p /tmp/fio
     - name: "I/O: fio random write 4K (iodepth=256)"
       run: |
         fio --name=rand-write-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
           --size=1G --numjobs=4 --rw=randwrite --group_reporting --runtime=30 --time_based \
-          --directory=/tmp/fio --cpus_allowed=0,1
+          --directory=/tmp/fio
         rm -rf /tmp/fio && mkdir -p /tmp/fio
