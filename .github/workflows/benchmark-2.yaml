@@ -24,6 +24,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y sysbench fio p7zip-full postgresql-client
         mkdir -p /tmp/fio
+    - name: tune
+      run: echo 5000000 | sudo tee /sys/kernel/debug/sched/migration_cost_ns
     - name: "I/O: fio random read/write 4K (iodepth=256)"
       run: |
         fio --name=rand-read-4k-deep --ioengine=libaio --direct=1 --bs=4k --iodepth=256 \
